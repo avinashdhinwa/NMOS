@@ -3,7 +3,7 @@ An OS I'm working on.
 
 ## Compiling ##
 
-To compile you will need a <a href="http://wiki.osdev.org/GCC_Cross-Compiler">i686 cross-compiler</a>
+To compile you will need a <a href="http://wiki.osdev.org/GCC_Cross-Compiler">i686 cross-compiler</a>.
 
 ### All files: ###
 
