@@ -1,0 +1,4 @@
+os-image
+*.bin
+*.dis
+*.o
