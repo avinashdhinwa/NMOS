@@ -10,8 +10,6 @@
 	mov bx, boot_msg
 	call print_string
 	
-	;mov bx, KERNEL_OFFSET
-	;mov dh, 15
 	mov dl, [BOOT_DRIVE]
 	call disk_load
 	
@@ -23,12 +21,6 @@ BOOT_DRIVE:
 	db 0
 	
 disk_load:
-	;mov ah, 0x02
-	;mov al, dh
-	;mov ch, 0x00
-	;mov dh, 0x00
-	;mov cl, 0x02
-	
 	mov si, dap
 	mov ah, 0x42
 	
