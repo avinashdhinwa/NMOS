@@ -28,3 +28,16 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 clean:
 	rm -fr *.bin *.dis *.o os-image
 	rm -fr kernel/*.o boot/*.bin drivers/*.o
+	
+os-image.iso: os-image
+	mkdir iso
+	mkdir iso/boot
+	cp os-image iso/boot/boot
+	xorriso -as mkisofs -R -J -c boot/bootcat \
+						-b boot/boot -no-emul-boot -boot-load-size 4 \
+						-o os-image.iso iso
+						
+iso: os-image.iso
+	
+run-iso: os-image.iso
+	qemu-system-x86_64 -boot d -cdrom os-image.iso -m 512
