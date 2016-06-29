@@ -2,4 +2,4 @@ os-image
 os-image.iso
 *.bin
 *.dis
-*.oiso
+*.o
