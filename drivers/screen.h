@@ -19,6 +19,7 @@ void setCursor(int x, int y);
 void __setCursor__(int offset);
 void printf(char text[]);
 void newLine();
+void printi(int input, int base);
 
 void printf(char text[]) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
@@ -27,12 +28,27 @@ void printf(char text[]) {
 	for(i = 0; text[i] != 0; i++, offset+=2) {
 		if(text[i] == '\n') {
 			newLine();
-			return;
 		} else {
 			video_memory[offset] = (text[i]);
 			video_memory[offset+1] = WHITE_ON_BLACK;
 		}	
 	}
+	
+	__setCursor__(1+offset);
+}
+
+void printascii(char c) {
+	char* video_memory = (char*) VIDEO_ADDRESS;
+	int i;
+	int x;
+	if(c == '\n') {
+		newLine();
+	} else {
+		video_memory[offset] = c;
+		video_memory[offset+1] = WHITE_ON_BLACK;
+	}
+	
+	offset += 2;
 	
 	__setCursor__(1+offset);
 	
@@ -103,4 +119,9 @@ void clearScreen(){
 	}
 	
 	setCursor(0, 0);
+}
+
+void printi(int input, int base) {
+	char* buf;
+	printf(itoa(input, buf, base));
 }
