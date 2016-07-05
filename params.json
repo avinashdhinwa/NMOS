@@ -1,6 +1,6 @@
 {
   "name": "NMOS",
   "tagline": "An OS I'm working on.",
-  "body": "# NMOS\r\nAn OS I'm working on.\r\n\r\n## Compiling ##\r\n\r\nTo compile you will need a <a href=\"http://wiki.osdev.org/GCC_Cross-Compiler\">i686 cross-compiler</a>.\r\n\r\n### All files: ###\r\n\r\n\tmake\r\n\r\nor\r\n\r\n\tmake all\r\n\r\n### Specific file: ###\r\n\r\n\tmake foo.c\r\n\r\nReplace foo.c with the name of the file.\r\n\r\n### Make and run: ###\r\n\r\n\tmake run\r\n",
+  "body": "# NMOS\r\nAn OS I'm working on.\r\n\r\n## Compiling ##\r\n\r\nTo compile you will need a <a href=\"http://wiki.osdev.org/GCC_Cross-Compiler\">i686 cross-compiler</a>.\r\n\r\n### All files: ###\r\n\r\n\tmake\r\n\r\nor\r\n\r\n\tmake all\r\n\r\n### Specific file: ###\r\n\r\n\tmake foo.c\r\n\r\nReplace foo.c with the name of the file.\r\n\r\n### Make and run: ###\r\n\r\n\tmake run\r\n\t\r\n## ISO building tools: ##\r\n\r\n# WARNING! #\r\n\r\nISOs are currently NOT SUPPORTED and attempting to run an ISO will result in the OS hanging.\r\nISO tools are only for development use and not for actual use. YOU HAVE BEEN WARNED!\r\n\r\n### Build ISO: ###\r\n\r\n\tmake iso\r\n\t\r\n### Build ISO and run: ###\r\n\r\n\tmake run-iso\r\n",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
