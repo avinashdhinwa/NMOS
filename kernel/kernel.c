@@ -25,7 +25,7 @@ void main() {
 	printfc(" |_| \\_|_|  |_|\\____/|_____/\n\n", LGREEN_ON_BLACK);
 	printf("Press 1 for terminal, or 2 for GUI [1]:");
 	//printi(getScancode(), 16);
-	printascii(getChar());
+	getText();
 	
 	//setCursor(getOffset(2, 3));
 	

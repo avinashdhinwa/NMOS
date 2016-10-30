@@ -1,4 +1,8 @@
-#define KEY_NUM 100
+// Depends on:
+// Screen.h
+
+#define KEY_NUM 700
+#define KEY_DELAY 900000
 
 char scancode[KEY_NUM] = {
 	0x1b,	// ASCII for escape
@@ -70,4 +74,13 @@ char getScancode(){
 
 char getChar() {
 	return scancode[getScancode() - 1];
+}
+void getText() {
+	while(1) {
+		printascii(getChar());
+		int i = 1;
+		while(i<KEY_DELAY) { 			// Delay to stop chars getting typed too fast (i.e 1000000 characters per button press)
+			i++;
+		}
+	}
 }

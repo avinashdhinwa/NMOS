@@ -1,3 +1,6 @@
+// Depends on:
+// misc.h
+
 #include "../kernel/low_level.c"
 
 #define VIDEO_ADDRESS 0xb8000
@@ -51,8 +54,7 @@ void printascii(char c) {
 	offset += 2;
 	
 	__setCursor__(1+offset);
-	
-	return;
+
 }
 
 void printfc(char text[], char attr) {
