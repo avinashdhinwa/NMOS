@@ -1,7 +1,7 @@
 // Depends on:
 // misc.h
 
-#include "../kernel/low_level.c"
+#include "../drivers/low_level.h"
 
 #define VIDEO_ADDRESS 0xb8000
 #define REG_SCREEN_CTRL 0x3D4
@@ -23,6 +23,9 @@ void __setCursor__(int offset);
 void printf(char text[]);
 void newLine();
 void printi(int input, int base);
+void printChar(char c);
+void cursorForwards(int num);
+void cursorBack(int num);
 
 void printf(char text[]) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
@@ -40,7 +43,7 @@ void printf(char text[]) {
 	__setCursor__(1+offset);
 }
 
-void printascii(char c) {
+void printChar(char c) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
 	int i;
 	int x;
@@ -52,9 +55,7 @@ void printascii(char c) {
 	}
 	
 	offset += 2;
-	
 	__setCursor__(1+offset);
-
 }
 
 void printfc(char text[], char attr) {
@@ -126,4 +127,22 @@ void clearScreen(){
 void printi(int input, int base) {
 	char* buf;
 	printf(itoa(input, buf, base));
+}
+
+void cursorBack(int num) {
+	int i = 1;
+	while (i <= num) {
+		offset -= 2;
+		__setCursor__(offset);
+		i++;
+	}
+}
+
+void cursorForwards(int num) {
+	int i = 1;
+	while (i <= num) {
+		offset += 2;
+		__setCursor__(offset);
+		i++;
+	}
 }
