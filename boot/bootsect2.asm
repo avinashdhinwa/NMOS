@@ -1,40 +1,42 @@
 [bits 16]
 [org 0x7c00]
+
+bootld_start:
 	KERNEL_OFFSET equ 0x1000
-	
+
 	mov bp, 0x9000
 	mov sp, bp
-	
+
 	mov [BOOT_DRIVE], dl
-	
+
 	mov bx, boot_msg
 	call print_string
-	
+
 	mov dl, [BOOT_DRIVE]
 	call disk_load
-	
+
 	jmp pm_setup
-	
+
 	jmp $
-	
+
 BOOT_DRIVE:
 	db 0
-	
+
 disk_load:
 	mov si, dap
 	mov ah, 0x42
-	
+
 	int 0x13
-	
+
 	;cmp al, 4
 	;jne disk_error_132
-		
+
 	ret
-	
+
 dap:
     db 0x10				; Size of DAP
     db 0
-    dw 16				; Number of sectors to read
+    dw 20				; Number of sectors to read
     dw KERNEL_OFFSET	; Offset
     dw 0				; Segment
 	dd 1
@@ -43,9 +45,9 @@ dap:
 disk_error_132:
 	mov bx, disk_error_132_msg
 	call print_string
-	
+
 	jmp $
-	
+
 disk_error_132_msg:
 	db 'Error! Error! Something is VERY wrong! (0x132)', 0
 
@@ -82,16 +84,16 @@ DATA_SEG equ gdt_data - gdt_start
 
 boot_msg:
 	db 'OS is booting files... ', 0
-	
+
 done_msg:
 	db 'Done! ', 0
-	
+
 %include "boot/print_string.asm"
-	
-pm_setup:	
+
+pm_setup:
 	mov bx, done_msg
 	call print_string
-	
+
     mov ax, 0
     mov ss, ax
     mov sp, 0xFFFC
@@ -108,7 +110,7 @@ pm_setup:
     or eax, 0x1
     mov cr0, eax
     jmp CODE_SEG:b32
-	
+
 	[bits 32]
 
 	VIDEO_MEMORY equ 0xb8000
@@ -143,22 +145,22 @@ pm_setup:
 
 	    mov ebx, pmode_msg
 	    call print32
-		
+
 		call KERNEL_OFFSET
 
 	    jmp $
-		
+
 	pmode_msg:
 		db 'Protected mode enabled!', 0
-	
+
 kernel:
 	mov ebx, pmode_msg
 	call print32
 	jmp $
-	
+
 pmode_tst:
 	db 'Testing...'
-	
+
 times 510-($-$$) db 0
 db 0x55
 db 0xAA

@@ -2,6 +2,8 @@
 // misc.h
 
 #include "../drivers/low_level.h"
+#include <stddef.h>
+#include <stdarg.h>
 
 #define VIDEO_ADDRESS 0xb8000
 #define REG_SCREEN_CTRL 0x3D4
@@ -14,6 +16,9 @@
 
 #define MAX_ROWS 25
 #define MAX_COLS 80
+#define MAX_OFFSET (MAX_ROWS*MAX_COLS+MAX_COLS)*2
+
+#define WILL_SCROLL offset > MAX_OFFSET - MAX_COLS * 3
 
 int offset;
 int getOffset(int x, int y);
@@ -26,20 +31,25 @@ void printi(int input, int base);
 void printChar(char c);
 void cursorForwards(int num);
 void cursorBack(int num);
+void scrollDown();
 
 void printf(char text[]) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
 	int i;
 	int x;
+	va_list ap;
 	for(i = 0; text[i] != 0; i++, offset+=2) {
 		if(text[i] == '\n') {
 			newLine();
 		} else {
 			video_memory[offset] = (text[i]);
 			video_memory[offset+1] = WHITE_ON_BLACK;
-		}	
+		}
+		if (WILL_SCROLL) {
+			scrollDown();
+		}
 	}
-	
+
 	__setCursor__(1+offset);
 }
 
@@ -53,8 +63,13 @@ void printChar(char c) {
 		video_memory[offset] = c;
 		video_memory[offset+1] = WHITE_ON_BLACK;
 	}
-	
+
 	offset += 2;
+
+	if (WILL_SCROLL) {
+		scrollDown();
+	}
+
 	__setCursor__(1+offset);
 }
 
@@ -68,9 +83,12 @@ void printfc(char text[], char attr) {
 		} else {
 			video_memory[offset] = (text[i]);
 			video_memory[offset+1] = attr;
-		}	
+		}
+		if (WILL_SCROLL) {
+			scrollDown();
+		}
 	}
-	
+
 	__setCursor__(1+offset);
 }
 
@@ -79,9 +97,9 @@ int getOffset(int x, int y) {
 }
 
 void __setCursor__(int offset) {
-	
+
 	offset /= 2;
-	
+
 	outb(REG_SCREEN_CTRL, 14);
 	outb(REG_SCREEN_DATA, (unsigned char)(offset >> 8) & 0xff);
 	outb(REG_SCREEN_CTRL, 15);
@@ -104,23 +122,23 @@ int getCursor() {
 	int offset = inb(REG_SCREEN_DATA) << 8;
 	outb(REG_SCREEN_CTRL, 15);
 	offset += inb(REG_SCREEN_DATA);
-	
+
 	return offset * 2;
 }
 
 void clearScreen(){
 	int row = 0;
 	int col = 0;
-	
+
 	char* video_memory = (char*) VIDEO_ADDRESS;
-	
+
 	for(row = 0; row < MAX_ROWS; row ++){
 		for(col = 0; col < MAX_COLS; col ++){
 			video_memory[getOffset(col, row)] = ' ';
 			video_memory[getOffset(col, row)+1] = WHITE_ON_BLACK;
 		}
 	}
-	
+
 	setCursor(0, 0);
 }
 
@@ -145,4 +163,19 @@ void cursorForwards(int num) {
 		__setCursor__(offset);
 		i++;
 	}
+}
+
+void scrollDown() {
+	char* video_memory = (char*) VIDEO_ADDRESS;
+	size_t row_s = (size_t) MAX_COLS * 2;
+
+	// Copy rows
+
+	for(int row = 0; row <= MAX_ROWS; row++){
+		memcpy(VIDEO_ADDRESS + getOffset(0, row), VIDEO_ADDRESS + getOffset(0, row+1), row_s);
+	}
+
+	//Move cursor back
+
+	cursorBack(MAX_COLS);
 }
