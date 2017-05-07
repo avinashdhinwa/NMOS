@@ -1,24 +1,24 @@
-// Depends on:
-// misc.h
+#ifndef _SCREEN_H
+#define _SCREEN_H
 
 #include "ports.h"
 #include <stddef.h>
 #include <stdarg.h>
 
-#define VIDEO_ADDRESS 0xb8000
-#define REG_SCREEN_CTRL 0x3D4
-#define REG_SCREEN_DATA 0x3D5
+#define VIDEO_ADDRESS				0xb8000
+#define REG_SCREEN_CTRL			0x3D4
+#define REG_SCREEN_DATA			0x3D5
 
 /* Define colors */
 
-#define WHITE_ON_BLACK 0b00001111
-#define LGREEN_ON_BLACK 0b00001010
+#define WHITE_ON_BLACK			0b00001111
+#define LGREEN_ON_BLACK			0b00001010
 
-#define MAX_ROWS 25
-#define MAX_COLS 80
-#define MAX_OFFSET (MAX_ROWS*MAX_COLS+MAX_COLS)*2
+#define MAX_ROWS						25
+#define MAX_COLS						80
+#define MAX_OFFSET					(MAX_ROWS*MAX_COLS+MAX_COLS)*2
 
-#define WILL_SCROLL offset > MAX_OFFSET - MAX_COLS * 3
+#define WILL_SCROLL					offset > MAX_OFFSET - MAX_COLS * 3
 
 int offset;
 int getOffset(int x, int y);
@@ -179,3 +179,5 @@ void scrollDown() {
 
 	cursorBack(MAX_COLS);
 }
+
+#endif

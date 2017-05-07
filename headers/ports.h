@@ -1,3 +1,6 @@
+#ifndef _PORTS_H
+#define _PORTS_H
+
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -17,3 +20,6 @@ static inline uint8_t inb(uint16_t port)
                    : "Nd"(port) );
     return ret;
 }
+
+
+#endif

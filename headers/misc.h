@@ -1,4 +1,10 @@
+#ifndef _MISC_H
+#define _MISC_H
+
 #include <stddef.h>
+
+#define TRUE				1
+#define FALSE				0
 
 char* itoa(int value, char* str, int base);
 int memcmp(const void* aptr, const void* bptr, size_t size);
@@ -85,3 +91,5 @@ void delay(int delay) {
 		n++;
 	}
 }
+
+#endif

@@ -1,8 +1,8 @@
-// Depends on:
-// Screen.h
+#ifndef _KEKBOARD_H
+#define _KEYBOARD_H
 
-#define KEY_NUM 700
-#define KEY_DELAY 1000000
+#define KEY_NUM						700
+#define KEY_DELAY					1000000
 
 char scancode[KEY_NUM];
 char printKey();
@@ -100,7 +100,7 @@ void getText(char* output) {
 				output[n] = ' ';
 			}
 		} else if (key == '\n') {
-			
+
 		} else {
 			if (n < 20) {
 				printChar(key);
@@ -126,3 +126,5 @@ void keyDelay() {
 		i++;
 	}
 }
+
+#endif
