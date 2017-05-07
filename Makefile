@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard kernel/*.c headers/*.c)
-HEADERS = $(wildcard kernel/*.h headers/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h)
 OBJ = ${C_SOURCES:.c=.o}
 
 all: os-image
@@ -14,7 +14,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 	i686-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
 
 %.o: %.c ${HEADERS}
-	i686-elf-gcc -ffreestanding -Iheaders/ -c $< -o $@
+	i686-elf-gcc -ffreestanding -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@
@@ -27,7 +27,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 
 clean:
 	rm -fr *.bin *.dis *.o os-image
-	rm -fr kernel/*.o boot/*.bin headers/*.o
+	rm -fr kernel/*.o boot/*.bin drivers/*.o
 
 os-image.iso: os-image
 	mkdir iso

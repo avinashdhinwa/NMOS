@@ -22,7 +22,7 @@ Replace foo.c with the name of the file.
 ### Make and run: ###
 
 	make run
-
+	
 ## ISO building tools: ##
 
 # WARNING! #
@@ -33,7 +33,7 @@ ISO tools are only for development use and not for actual use. YOU HAVE BEEN WAR
 ### Build ISO: ###
 
 	make iso
-
+	
 ### Build ISO and run: ###
 
 	make run-iso
