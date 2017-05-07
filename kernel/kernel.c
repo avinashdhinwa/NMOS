@@ -1,7 +1,7 @@
-#include "../drivers/misc.h"
-#include "../drivers/screen.h"
-#include "../drivers/keyboard.h"
-#include "../drivers/power.h"
+#include "misc.h"
+#include "screen.h"
+#include "keyboard.h"
+#include "power.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -71,12 +71,12 @@ void parseCommand(char* command) {
 		}
 	}
 	if(success == 0) {
-		if(command = "") {
+		if(strcmp(command, "")) {
+			printf("Command not found!");
+		} else {
 			printf("Command ");
 			printf(command);
 			printf(" not found!");
-		} else {
-			printf("Command not found!");
 		}
 	}
 }
