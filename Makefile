@@ -11,7 +11,7 @@ os-image: boot/bootsect2.bin kernel.bin
 	cat $^ > os-image
 
 kernel.bin: kernel/kernel_entry.o ${OBJ}
-	i686-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
+	i686-elf-ld -o $@ -Ttext 0x2000 $^ --oformat binary
 
 %.o: %.c ${HEADERS}
 	i686-elf-gcc -ffreestanding -Iheaders/ -c $< -o $@

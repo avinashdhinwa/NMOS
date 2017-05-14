@@ -2,13 +2,11 @@
 #define _KEYBOARD_H
 
 #define KEY_NUM						700
-#define KEY_DELAY					1000000
 
 char scancode[KEY_NUM];
 char printKey();
 char getChar();
 void getText();
-void keyDelay();
 char getScancode();
 
 char scancode[KEY_NUM] = {
@@ -95,7 +93,7 @@ void getText(char* output) {
 				cursorBack(1);
 				printChar(' ');
 				cursorBack(1);
-				keyDelay();
+				delay(30000000);
 				n--;
 				output[n] = ' ';
 			}
@@ -104,7 +102,7 @@ void getText(char* output) {
 		} else {
 			if (n < 20) {
 				printChar(key);
-				keyDelay();
+				delay(30000000);
 				output[n] = key;
 				n++;
 			}
@@ -118,13 +116,6 @@ char printKey() {
 	char key=getChar();
 	printChar(key);
 	return key;
-}
-
-void keyDelay() {
-	int i = 1;
-	while(i<KEY_DELAY) { 			// Delay to stop chars getting typed too fast (i.e 1000000 characters per button press)
-		i++;
-	}
 }
 
 #endif

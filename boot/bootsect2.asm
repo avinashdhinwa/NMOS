@@ -2,7 +2,7 @@
 [org 0x7c00]
 
 bootld_start:
-	KERNEL_OFFSET equ 0x1000
+	KERNEL_OFFSET equ 0x2000
 
 	mov bp, 0x9000
 	mov sp, bp
@@ -36,7 +36,7 @@ disk_load:
 dap:
     db 0x10				; Size of DAP
     db 0
-    dw 20				; Number of sectors to read
+    dw 120				; Number of sectors to read
     dw KERNEL_OFFSET	; Offset
     dw 0				; Segment
 	dd 1
@@ -140,7 +140,7 @@ pm_setup:
 	    mov gs, ax
 	    mov ss, ax
 
-	    mov ebp, 0x2000
+	    mov ebp, 0x1000
 	    mov esp, ebp
 
 	    mov ebx, pmode_msg

@@ -2,6 +2,7 @@
 #include "screen.h"
 #include "keyboard.h"
 #include "power.h"
+#include "idt.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -40,6 +41,8 @@ void main() {
 	printfc(" | . ` | |\\/| | |  | |\\___ \\ \n", LGREEN_ON_BLACK);
 	printfc(" | |\\  | |  | | |__| |____) |\n", LGREEN_ON_BLACK);
 	printfc(" |_| \\_|_|  |_|\\____/|_____/\n\n", LGREEN_ON_BLACK);
+
+	init_idt();
 
 	terminal();
 
