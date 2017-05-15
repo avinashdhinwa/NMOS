@@ -61,7 +61,7 @@ struct idt_entry_s {
 
 typedef struct idt_entry_s idt_entry;
 
-void fillidt(void* idt, int select, void *offset, int type, int perm) {
+void fillidt(void* idt, int select, void (*offset)(void), int type, int perm) {
   size_t idt_ent_size = (size_t) 8;       // 8 bytes per entry
 
 	uint8_t type_attr;
@@ -86,7 +86,7 @@ static inline void lidt(void* base, uint16_t size) {
         void*    base;
     } __attribute__((packed)) IDTR = {size, base};
 
-    asm ("lidt %0" : : "m"(IDTR));
+    __asm__ ("lidt %0" : : "m"(IDTR));
 }
 
 void init_idt() {
@@ -99,7 +99,7 @@ void init_idt() {
 
 	_PIC_remap(32, 40);													// remap the PIC
 
-	asm ("sti");												// re-enable interrupts
+	__asm__ ("sti");												// re-enable interrupts
 }
 
 #endif
