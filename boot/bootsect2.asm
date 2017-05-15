@@ -4,8 +4,13 @@
 bootld_start:
 	KERNEL_OFFSET equ 0x2000
 
-	mov bp, 0x9000
-	mov sp, bp
+	xor ax, ax      ; Explicitly set ES = DS = 0
+	mov ds, ax
+	mov es, ax
+	mov bx, 0x8C00  ; Set SS:SP to 0x8C00:0x0000 . The stack will exist
+	                ;     between 0x8C00:0x0000 and 0x8C00:0xFFFF
+	mov ss, bx
+	mov sp, ax
 
 	mov [BOOT_DRIVE], dl
 
@@ -36,7 +41,10 @@ disk_load:
 dap:
     db 0x10				; Size of DAP
     db 0
-    dw 120				; Number of sectors to read
+    ; You can only read 46 sectors into memory between 0x2000 and
+    ; 0x7C00. Don't read anymore or we overwrite the bootloader we are
+    ; executing from. (0x7c00-0x2000)/512 = 46
+    dw 46				; Number of sectors to read
     dw KERNEL_OFFSET	; Offset
     dw 0				; Segment
 	dd 1

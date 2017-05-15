@@ -19,7 +19,7 @@ void* commands[5] = {
 	&help,
 	"reboot",
 	&reboot,
-	0x121212			// Command list signiature
+	(void *)0x121212			// Command list signiature
 };
 
 void fallback() {
@@ -65,7 +65,7 @@ void terminal() {
 void parseCommand(char* command) {
 	int i;
 	int success = 0;
-	for(i = 0; commands[i] != 0x121212; i+=2) {
+	for(i = 0; commands[i] != (void *)0x121212; i+=2) {
 		if (strcmp(command, commands[i])) {
 			success = 1;
 			int (*commandPtr)();
@@ -87,7 +87,7 @@ void parseCommand(char* command) {
 void help() {
 	int i;
 	printf("Commands:");
-	for(i = 0; commands[i] != 0x121212; i+=2) {
+	for(i = 0; commands[i] != (void *)0x121212; i+=2) {
 		printf("\n");
 		printf(commands[i]);
 	}

@@ -172,7 +172,7 @@ void scrollDown() {
 	// Copy rows
 
 	for(int row = 0; row <= MAX_ROWS; row++){
-		memcpy(VIDEO_ADDRESS + getOffset(0, row), VIDEO_ADDRESS + getOffset(0, row+1), row_s);
+		memcpy(video_memory + getOffset(0, row), video_memory + getOffset(0, row+1), row_s);
 	}
 
 	//Move cursor back
