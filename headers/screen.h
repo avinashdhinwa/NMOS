@@ -11,8 +11,8 @@
 
 /* Define colors */
 
-#define WHITE_ON_BLACK			0b00001111
-#define LGREEN_ON_BLACK			0b00001010
+#define WHITE_ON_BLACK			0x0f /* 0b00001111 */
+#define LGREEN_ON_BLACK			0x0a /* 0b00001010 */
 
 #define MAX_ROWS						25
 #define MAX_COLS						80
@@ -143,7 +143,7 @@ void clearScreen(){
 }
 
 void printi(int input, int base) {
-	char* buf;
+	char buf[64];
 	printf(itoa(input, buf, base));
 }
 
@@ -172,7 +172,7 @@ void scrollDown() {
 	// Copy rows
 
 	for(int row = 0; row <= MAX_ROWS; row++){
-		memcpy(VIDEO_ADDRESS + getOffset(0, row), VIDEO_ADDRESS + getOffset(0, row+1), row_s);
+		memcpy(video_memory + getOffset(0, row), video_memory + getOffset(0, row+1), row_s);
 	}
 
 	//Move cursor back

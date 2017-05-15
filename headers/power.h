@@ -18,7 +18,7 @@ void reboot()
 {
     uint8_t temp;
 
-    asm volatile ("cli");
+    __asm__ __volatile__ ("cli");
 
     do {
         temp = inb(KBRD_INTRFC);						        //empty user data
@@ -28,7 +28,7 @@ void reboot()
 
     outb(KBRD_INTRFC, KBRD_RESET);						      //pulse CPU reset line
 loop:
-    asm volatile ("hlt");
+    __asm__ __volatile__ ("hlt");
     goto loop;
 }
 

@@ -14,12 +14,16 @@ void terminal();
 void help();
 void foo();
 
-void* commands[5] = {
-	"help",
-	&help,
-	"reboot",
-	&reboot,
-	0x121212			// Command list signiature
+struct cmd_entry_t {
+    char *cmd_str;
+    void (*cmd_fun)(void);
+};
+typedef struct cmd_entry_t cmd_entry;
+
+cmd_entry commands[5] = {
+	{"help", &help},
+	{"reboot", &reboot},
+	{(void *)0x121212, NULL}			// Command list signiature
 };
 
 void fallback() {
@@ -54,7 +58,7 @@ void main() {
 void terminal() {
 	while (1) {				//Forever
 		printf("NMOS:>");
-		char* command;
+		char command[256];
 		getText(command);
 		delay(1000000);
 		parseCommand(command);
@@ -65,11 +69,11 @@ void terminal() {
 void parseCommand(char* command) {
 	int i;
 	int success = 0;
-	for(i = 0; commands[i] != 0x121212; i+=2) {
-		if (strcmp(command, commands[i])) {
+	for(i = 0; commands[i].cmd_str != (void *)0x121212; i++) {
+		if (strcmp(command, commands[i].cmd_str)) {
 			success = 1;
-			int (*commandPtr)();
-			commandPtr = commands[i+1];
+			void (*commandPtr)(void);
+			commandPtr = commands[i].cmd_fun;
 			(*commandPtr)();
 		}
 	}
@@ -87,8 +91,8 @@ void parseCommand(char* command) {
 void help() {
 	int i;
 	printf("Commands:");
-	for(i = 0; commands[i] != 0x121212; i+=2) {
+	for(i = 0; commands[i].cmd_str != (void *)0x121212; i++) {
 		printf("\n");
-		printf(commands[i]);
+		printf(commands[i].cmd_str);
 	}
 }

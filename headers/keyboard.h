@@ -3,13 +3,13 @@
 
 #define KEY_NUM						700
 
-char scancode[KEY_NUM];
+unsigned char scancode[KEY_NUM];
 char printKey();
 char getChar();
 void getText();
 char getScancode();
 
-char scancode[KEY_NUM] = {
+unsigned char scancode[KEY_NUM] = {
 	0x1b,	// ASCII for escape
 	'1',
 	'2',

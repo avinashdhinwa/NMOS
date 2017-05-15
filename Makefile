@@ -20,10 +20,10 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 	nasm $< -f elf -o $@
 
 %.bin: %.asm
-	nasm $< -f bin -I ’../../16bit/’ -o $@
+	nasm $< -f bin -I ../../16bit/ -o $@
 
 %.bin: %.asm
-	nasm $< -f bin -I ’../../16bit/’ -o $@
+	nasm $< -f bin -I ../../16bit/ -o $@
 
 clean:
 	rm -fr *.bin *.dis *.o os-image
