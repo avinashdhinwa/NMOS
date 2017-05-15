@@ -148,7 +148,8 @@ pm_setup:
 	    mov gs, ax
 	    mov ss, ax
 
-	    mov ebp, 0x1000
+        ; Place stack below EBDA in lower memory
+	    mov ebp, 0x9c000
 	    mov esp, ebp
 
 	    mov ebx, pmode_msg
