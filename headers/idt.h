@@ -5,6 +5,7 @@
 #include "screen.h"
 #include "config.h"
 #include "ports.h"
+#include "keyboard.h"
 
 #define MAX_ISR_NUM 33   /* 33 is keyboard handler IRQ1 */
                          /* Set this to the highest ISR you use */
@@ -22,14 +23,11 @@ __asm__(".global isr_irq0\n"
         "popa\n\t"                   /* Restore all the registers */
         "iret");
 
-/* Define the IRQ0 timer interrupt handler called by the stub */
-void isr_irq0_handler(void)
-{
-    /* Do timer handling here */
+void isr_irq0_handler(void) {
 
-    /* End of interrupt */
-	_PIC_sendEOI(0x0);
-    return;
+  /* End of interrupt */
+  _PIC_sendEOI(0x0);
+  return;
 }
 
 /* Define an ISR stub for IRQ1 */
@@ -41,21 +39,42 @@ __asm__(".global isr_irq1\n"
         "popa\n\t"                   /* Restore all the registers */
         "iret");
 
-/* Define the IRQ1 keyboard interrupt handler called by the stub */
-void isr_irq1_handler(void)
-{
-    /* Do keyboard interrupt handling here */
+void isr_irq1_handler(void) {
+  char s = inb(0x60);
 
-    /* End of interrupt */
+  key_packet retPacket;
+
+  if(s < 0) {
+    retPacket.keyflags |= 1;
+    s += 0x80;                        // add 0x80 to get actual key pressed
+  } else if(s == 0x3a) {              // capslock
+    capsStatus ^= 1;
+  }
+
+  if(s == 0x2a || s == 0x36) {        // shift pressed or released
+    capsStatus ^= 1;
+  }
+
+  retPacket.key = scancode[s - 1];
+
+  if(capsStatus == 1 && retPacket.key >= 97 && retPacket.key <= 122) {
+    retPacket.key -= 32;
+  }
+
+  curPacket = retPacket;
+
+  //printChar(retPacket.key);
+
+  /* End of interrupt */
 	_PIC_sendEOI(0x1);
-    return;
+  return;
 }
 
 struct idt_entry_s {
   uint16_t offset_1;                    // offset bits 0..15
   uint16_t selector;                    // a code segment selector in the GDT or LDT
   uint8_t zero;                         // unused
-  uint8_t type_attr;                                      // type and attributes
+  uint8_t type_attr;                    // type and attributes
   uint16_t offset_2;                    // offset bits 16..31
 } __attribute__ ((packed));
 
@@ -90,7 +109,7 @@ static inline void lidt(void* base, uint16_t size) {
 }
 
 void init_idt() {
-    idt_entry *idt = (idt_entry *)0x00000;
+  idt_entry *idt = (idt_entry *)0x00000;
 
 	fillidt(idt+32, 8, isr_irq0, 0xe, 0);
 	fillidt(idt+33, 8, isr_irq1, 0xe, 0);

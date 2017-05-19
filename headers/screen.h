@@ -42,8 +42,10 @@ void printf(char text[]) {
 		if(text[i] == '\n') {
 			newLine();
 		} else {
-			video_memory[offset] = (text[i]);
-			video_memory[offset+1] = WHITE_ON_BLACK;
+			if(text[i] >= 32 && text[i] <= 126) {
+				video_memory[offset] = (text[i]);
+				video_memory[offset+1] = WHITE_ON_BLACK;
+			}
 		}
 		if (WILL_SCROLL) {
 			scrollDown();
@@ -56,15 +58,15 @@ void printf(char text[]) {
 void printChar(char c) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
 	int i;
-	int x;
 	if(c == '\n') {
 		newLine();
 	} else {
-		video_memory[offset] = c;
-		video_memory[offset+1] = WHITE_ON_BLACK;
+		if(c >= 32 && c <= 126) {
+			video_memory[offset] = c;
+			video_memory[offset+1] = WHITE_ON_BLACK;
+			offset += 2;
+		}
 	}
-
-	offset += 2;
 
 	if (WILL_SCROLL) {
 		scrollDown();

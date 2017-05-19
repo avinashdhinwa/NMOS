@@ -58,8 +58,8 @@ void main() {
 void terminal() {
 	while (1) {				//Forever
 		printf("NMOS:>");
-		char command[256];
-		getText(command);
+		char* command;
+		command = getText();
 		delay(1000000);
 		parseCommand(command);
 		printf("\n");

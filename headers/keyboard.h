@@ -1,4 +1,4 @@
-#ifndef _KEKBOARD_H
+#ifndef _KEYBOARD_H
 #define _KEYBOARD_H
 
 #define KEY_NUM						700
@@ -6,8 +6,27 @@
 unsigned char scancode[KEY_NUM];
 char printKey();
 char getChar();
-void getText();
+char* getText();
 char getScancode();
+
+int capsStatus = 0;
+
+struct key_packet_s {
+	uint8_t keyflags;
+	char key;
+};
+
+/*
+keyflags:
+
+bit 1: pressed (1) / released (0)
+bits 2-8: unused
+*/
+
+typedef struct key_packet_s key_packet;
+
+key_packet curPacket;
+key_packet blankPacket;
 
 unsigned char scancode[KEY_NUM] = {
 	0x1b,	// ASCII for escape
@@ -69,40 +88,26 @@ unsigned char scancode[KEY_NUM] = {
 	' '
 };
 
-char getScancode(){
-	char c=0;
-	do {
-		if(inb(0x60)!=c){
-			c=inb(0x60);
-			if(c>0) {
-				return c;
-			}
-		}
-	} while(1);
-}
-
-char getChar() {
-	return scancode[getScancode() - 1];
-}
-void getText(char* output) {
+char* getText() {
+	char* output;
+	int key = 0;
 	int n = 0;
-	while(getChar() != '\n') {
+	int prog = 1;
+	while(prog) {
 		char key = getChar();
 		if (key == '\b') {
-			if (n > 0) {
+			if (n != 0) {
 				cursorBack(1);
 				printChar(' ');
 				cursorBack(1);
-				delay(30000000);
 				n--;
 				output[n] = ' ';
 			}
 		} else if (key == '\n') {
-
+			prog = 0;
 		} else {
 			if (n < 20) {
 				printChar(key);
-				delay(30000000);
 				output[n] = key;
 				n++;
 			}
@@ -110,6 +115,14 @@ void getText(char* output) {
 	}
 	output[n] = '\0';
 	printf("\n");
+	return output;
+}
+
+char getChar() {
+	while (curPacket.key == 0 || curPacket.keyflags & 0b00000001) {}
+	char key = curPacket.key;
+	curPacket = blankPacket;
+	return key;
 }
 
 char printKey() {
