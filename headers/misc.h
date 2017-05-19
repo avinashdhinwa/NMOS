@@ -6,6 +6,9 @@
 #define TRUE				1
 #define FALSE				0
 
+#define global			extern
+#define GLOBAL			global
+
 char* itoa(int value, char* str, int base);
 int memcmp(const void* aptr, const void* bptr, size_t size);
 

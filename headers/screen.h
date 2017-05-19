@@ -11,8 +11,8 @@
 
 /* Define colors */
 
-#define WHITE_ON_BLACK			0b00001111
-#define LGREEN_ON_BLACK			0b00001010
+#define WHITE_ON_BLACK			0x0f /* 0b00001111 */
+#define LGREEN_ON_BLACK			0x0a /* 0b00001010 */
 
 #define MAX_ROWS						25
 #define MAX_COLS						80
@@ -42,8 +42,10 @@ void printf(char text[]) {
 		if(text[i] == '\n') {
 			newLine();
 		} else {
-			video_memory[offset] = (text[i]);
-			video_memory[offset+1] = WHITE_ON_BLACK;
+			if(text[i] >= 32 && text[i] <= 126) {
+				video_memory[offset] = (text[i]);
+				video_memory[offset+1] = WHITE_ON_BLACK;
+			}
 		}
 		if (WILL_SCROLL) {
 			scrollDown();
@@ -56,15 +58,15 @@ void printf(char text[]) {
 void printChar(char c) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
 	int i;
-	int x;
 	if(c == '\n') {
 		newLine();
 	} else {
-		video_memory[offset] = c;
-		video_memory[offset+1] = WHITE_ON_BLACK;
+		if(c >= 32 && c <= 126) {
+			video_memory[offset] = c;
+			video_memory[offset+1] = WHITE_ON_BLACK;
+			offset += 2;
+		}
 	}
-
-	offset += 2;
 
 	if (WILL_SCROLL) {
 		scrollDown();
@@ -143,7 +145,7 @@ void clearScreen(){
 }
 
 void printi(int input, int base) {
-	char* buf;
+	char buf[64];
 	printf(itoa(input, buf, base));
 }
 
@@ -172,7 +174,7 @@ void scrollDown() {
 	// Copy rows
 
 	for(int row = 0; row <= MAX_ROWS; row++){
-		memcpy(VIDEO_ADDRESS + getOffset(0, row), VIDEO_ADDRESS + getOffset(0, row+1), row_s);
+		memcpy(video_memory + getOffset(0, row), video_memory + getOffset(0, row+1), row_s);
 	}
 
 	//Move cursor back

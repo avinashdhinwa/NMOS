@@ -59,6 +59,4 @@ void _PIC_remap(int master, int slave)
 	outb(PIC2_DATA, a2);
 }
 
-
-
 #endif
