@@ -2,6 +2,8 @@
 #define _SCREEN_H
 
 #include "ports.h"
+#include "misc.h"
+#include "memory.h"
 #include <stddef.h>
 #include <stdarg.h>
 
@@ -36,8 +38,6 @@ void scrollDown();
 void printf(char text[]) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
 	int i;
-	int x;
-	va_list ap;
 	for(i = 0; text[i] != 0; i++, offset+=2) {
 		if(text[i] == '\n') {
 			newLine();
@@ -55,9 +55,9 @@ void printf(char text[]) {
 	__setCursor__(1+offset);
 }
 
+
 void printChar(char c) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
-	int i;
 	if(c == '\n') {
 		newLine();
 	} else {
@@ -78,7 +78,6 @@ void printChar(char c) {
 void printfc(char text[], char attr) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
 	int i;
-	int x;
 	for(i = 0; text[i] != 0; i++, offset+=2) {
 		if(text[i] == '\n') {
 			newLine();

@@ -14,7 +14,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 	i686-elf-ld -o $@ -Ttext 0x2000 $^ --oformat binary
 
 %.o: %.c ${HEADERS}
-	i686-elf-gcc -ffreestanding -Iheaders/ -c $< -o $@
+	i686-elf-gcc -ffreestanding -Iheaders/ -Wall -Wextra -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@

@@ -6,7 +6,7 @@
 unsigned char scancode[KEY_NUM];
 char printKey();
 char getChar();
-char* getText();
+void getText(char* out);
 char getScancode();
 
 int capsStatus = 0;
@@ -29,68 +29,67 @@ key_packet curPacket;
 key_packet blankPacket;
 
 unsigned char scancode[KEY_NUM] = {
-	0x1b,	// ASCII for escape
-	'1',
-	'2',
-	'3',
-	'4',
-	'5',
-	'6',
-	'7',
-	'8',
-	'9',
-	'0',
-	'-',
-	'=',
-	'\b',	// ASCII for backspace
-	'\t',	// ASCII for tab
-	'q',
-	'w',
-	'e',
-	'r',
-	't',
-	'y',
-	'u',
-	'i',
-	'o',
-	'p',
-	'[',
-	']',
-	'\n',	// ASCII for newline (enter)
-	0x80,	// NMOS code for ctrl
-	'a',
-	's',
-	'd',
-	'f',
-	'g',
-	'h',
-	'j',
-	'k',
-	'l',
-	';',
-	'\'',
-	'`',
-	0x81,	// NMOS code for shift
-	'\\',
-	'z',
-	'x',
-	'c',
-	'v',
-	'b',
-	'n',
-	'm',
-	',',
-	'.',
-	'/',
-	0x81,	// NMOS code for shift
-	'*',
-	0x82,	// NMOS code for alt
-	' '
+	0x1b, /* ASCII for escape */ '\0',	// null charachter
+	'1','!',
+	'2','@',
+	'3','\0',
+	'4','$',
+	'5','%',
+	'6','^',
+	'7','&',
+	'8','*',
+	'9','(',
+	'0',')',
+	'-','_',
+	'=','+',
+	'\b',	/* ASCII for backspace */ '\0',
+	'\t',	/* ASCII for tab */ '\0',
+	'q','Q',
+	'w','W',
+	'e','E',
+	'r','R',
+	't','T',
+	'y','Y',
+	'u','U',
+	'i','I',
+	'o','O',
+	'p','P',
+	'[','{',
+	']','}',
+	'\n',	/* ASCII for newline (enter) */ '\0',
+	0x80,	/* NMOS code for ctrl */ '\0',
+	'a','A',
+	's','S',
+	'd','D',
+	'f','F',
+	'g','G',
+	'h','H',
+	'j','J',
+	'k','K',
+	'l','L',
+	';',':',
+	'\'','"',
+	'`','~',
+	0x81,	/* NMOS code for shift */ '\0',
+	'\\','|',
+	'z','Z',
+	'x','X',
+	'c','C',
+	'v','V',
+	'b','B',
+	'n','N',
+	'm','M',
+	',','<',
+	'.','>',
+	'/','?',
+	0x81,	/* NMOS code for shift */ '\0',	// shift-shift = ???
+	'*','\0',
+	0x82,	/* NMOS code for alt */ '\0',
+	' ','\0'
+	// TODO: find out what shift-* and shift-3 actually are
 };
 
-char* getText() {
-	char* output;
-	int key = 0;
+void getText(char* out) {
 	int n = 0;
 	int prog = 1;
 	while(prog) {
@@ -101,21 +100,20 @@ char* getText() {
 				printChar(' ');
 				cursorBack(1);
 				n--;
-				output[n] = ' ';
+				out[n] = ' ';
 			}
 		} else if (key == '\n') {
 			prog = 0;
 		} else {
 			if (n < 20) {
 				printChar(key);
-				output[n] = key;
+				out[n] = key;
 				n++;
 			}
 		}
 	}
-	output[n] = '\0';
+	out[n] = '\0';
 	printf("\n");
-	return output;
 }
 
 char getChar() {

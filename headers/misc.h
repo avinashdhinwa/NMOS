@@ -9,6 +9,8 @@
 #define global			extern
 #define GLOBAL			global
 
+#define unused __attribute__((unused))
+
 char* itoa(int value, char* str, int base);
 int memcmp(const void* aptr, const void* bptr, size_t size);
 
@@ -45,27 +47,7 @@ char* itoa(int value, char* str, int base){
 	return rc;
 }
 
-// todo: move to new file memory.h
-
-int memcmp(const void* aptr, const void* bptr, size_t size) {
-	const unsigned char* a = (const unsigned char*) aptr;
-	const unsigned char* b = (const unsigned char*) bptr;
-	for (size_t i = 0; i < size; i++) {
-		if (a[i] < b[i])
-			return -1;
-		else if (b[i] < a[i])
-			return 1;
-	}
-	return 0;
-}
-
-void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size) {
-	unsigned char* dst = (unsigned char*) dstptr;
-	const unsigned char* src = (const unsigned char*) srcptr;
-	for (size_t i = 0; i < size; i++)
-		dst[i] = src[i];
-	return dstptr;
-}
+// memcmp and memcpy wos here
 
 int strlen(char input[]) {
 	int i;
@@ -73,21 +55,58 @@ int strlen(char input[]) {
 	return i;
 }
 
-int strcmp(char* input, char* check)
-{
-    int i,result=1;
+int strcmp(char* input, char* check) {
+  int i,result=1;
 	if (strlen(input) != strlen(check)) {
 		return 0;
 	}
-    for (i=0;input[i]!='\0' && check[i]!='\0';i++){
-        if(input[i]!=check[i]){
-            result=0;
-            break;
-        }
+  for (i=0;input[i]!='\0' && check[i]!='\0';i++){
+    if(input[i]!=check[i]) {
+      result = 0;
+      break;
     }
-    return result;
+  }
+  return result;
 }
 
+int strcharfind(char* input, char check, int cont) { // Finds first occurance of check in input.
+	static int saveptr;
+	int i;
+	if(cont == 1) {
+		i = saveptr;
+	} else {
+		i = 0;
+	}
+  for(;input[i]!='\0';i++){
+    if(input[i]==check) {
+			saveptr = i;
+      return i;
+    }
+  }
+  return -1;
+}
+
+void splitstr(char str[], int part, char search, char out[]) {
+	int i;
+	for(i=0; str[i]!='\0'; i++) {
+    if(str[i] == search) {
+      break;
+    }
+  }
+	int j;
+	int k;
+	if(part == 1) {
+		for(j = 0; j < i; j++) {
+			out[j] = str[j];
+  	}
+		out[j] = '\0';
+	} else if(part == 2) {
+		for(k = 0,j = i+1; j <= strlen(str)-1; j++, k++) {
+			out[k] = str[j];
+  	}
+		out[k] = '\0';
+	}
+}
 void delay(int delay) {
 	int n = 1;
 	while (n < delay) {

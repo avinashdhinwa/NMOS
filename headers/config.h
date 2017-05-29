@@ -5,8 +5,11 @@
 #define _NMOS
 
 #define _NMOS_VER_MAJ     "0"
-#define _NMOS_VER_MIN     "1"
+#define _NMOS_VER_MIN     "9"
 
-#define _NMOS_VER         NMOS_VER MAJ NMOS_VER_MIN
+#define _NMOS_VER         _NMOS_VER_MAJ "." _NMOS_VER_MIN
+
+#define SYS_VER_PACKED _NMOS_VER
+#define SYS_VER "v" SYS_VER_PACKED
 
 #endif

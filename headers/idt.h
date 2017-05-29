@@ -6,6 +6,7 @@
 #include "config.h"
 #include "ports.h"
 #include "keyboard.h"
+#include "memory.h"
 
 #define MAX_ISR_NUM 33   /* 33 is keyboard handler IRQ1 */
                          /* Set this to the highest ISR you use */
@@ -45,7 +46,7 @@ void isr_irq1_handler(void) {
   key_packet retPacket;
 
   if(s < 0) {
-    retPacket.keyflags |= 1;
+    retPacket.keyflags = 1;
     s += 0x80;                        // add 0x80 to get actual key pressed
   } else if(s == 0x3a) {              // capslock
     capsStatus ^= 1;
@@ -55,10 +56,10 @@ void isr_irq1_handler(void) {
     capsStatus ^= 1;
   }
 
-  retPacket.key = scancode[s - 1];
-
-  if(capsStatus == 1 && retPacket.key >= 97 && retPacket.key <= 122) {
-    retPacket.key -= 32;
+  if(capsStatus == 1) {
+    retPacket.key = scancode[(s*2)-1];
+  } else {
+    retPacket.key = scancode[(s*2)-2];
   }
 
   curPacket = retPacket;

@@ -3,3 +3,4 @@ os-image.iso
 *.bin
 *.dis
 *.o
+*.dSYM
