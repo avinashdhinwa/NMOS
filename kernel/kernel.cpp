@@ -125,9 +125,9 @@ void ping(unused char* arg) {
 
 void time(unused char* arg) {
   printf("The time is:\n");
-  printi(second(), 10);
+  printi(hour(), 10);
   printf(":");
   printi(minute(), 10);
   printf(":");
-  printi(hour(), 10);
+  printi(second(), 10);
 }
