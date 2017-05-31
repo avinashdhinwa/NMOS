@@ -3,7 +3,6 @@
 
 #define KEY_NUM						700
 
-unsigned char scancode[KEY_NUM];
 char printKey();
 char getChar();
 void getText(char* out);
