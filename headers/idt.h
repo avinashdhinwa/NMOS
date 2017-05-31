@@ -1,6 +1,8 @@
 #ifndef _IDT_H
 #define _IDT_H
 
+extern "C" {  // fix annoying problem where it wouldn't link
+
 #include "pic.h"
 #include "screen.h"
 #include "config.h"
@@ -81,7 +83,7 @@ struct idt_entry_s {
 
 typedef struct idt_entry_s idt_entry;
 
-void fillidt(void* idt, int select, void (*offset)(void), int type, int perm) {
+void fillidt(void* idt, uint16_t select, void (*offset)(void), int type, int perm) {
   size_t idt_ent_size = (size_t) 8;       // 8 bytes per entry
 
 	uint8_t type_attr;
@@ -96,7 +98,7 @@ void fillidt(void* idt, int select, void (*offset)(void), int type, int perm) {
 	type_attr <<= 4;												// 4 bits to set
 	type_attr |= type;											// type is 4 bits
 
-  idt_entry idt_desc = {((uintptr_t)offset) & 0xffff, select, 0, type_attr, ((uintptr_t)offset & 0xffff0000) >> 16};
+  idt_entry idt_desc = {static_cast<uint16_t>(((uintptr_t)offset) & 0xffff), select, 0, type_attr, static_cast<uint16_t>(((uintptr_t)offset & 0xffff0000) >> 16)};
   memcpy(idt, &idt_desc, idt_ent_size);		// copy the descriptor
 }
 
@@ -120,6 +122,8 @@ void init_idt() {
 	_PIC_remap(32, 40);													// remap the PIC
 
 	__asm__ ("sti");												// re-enable interrupts
+}
+
 }
 
 #endif

@@ -8,13 +8,14 @@
 
 #define global			extern
 #define GLOBAL			global
+#define restrict __restrict__
 
 #define unused __attribute__((unused))
 
-char* itoa(int value, char* str, int base);
+const char* itoa(int value, char* str, int base);
 int memcmp(const void* aptr, const void* bptr, size_t size);
 
-char* itoa(int value, char* str, int base){
+const char* itoa(int value, char* str, int base) {
 	char* rc;
 	char* ptr;
 	char* low;
@@ -49,13 +50,13 @@ char* itoa(int value, char* str, int base){
 
 // memcmp and memcpy wos here
 
-int strlen(char input[]) {
+int strlen(const char input[]) {
 	int i;
 	for (i = 0;input[i]!='\0';i++) {}		// Measure length of input[] by looking for \0.
 	return i;
 }
 
-int strcmp(char* input, char* check) {
+int strcmp(const char* input, const char* check) {
   int i,result=1;
 	if (strlen(input) != strlen(check)) {
 		return 0;
@@ -69,24 +70,7 @@ int strcmp(char* input, char* check) {
   return result;
 }
 
-int strcharfind(char* input, char check, int cont) { // Finds first occurance of check in input.
-	static int saveptr;
-	int i;
-	if(cont == 1) {
-		i = saveptr;
-	} else {
-		i = 0;
-	}
-  for(;input[i]!='\0';i++){
-    if(input[i]==check) {
-			saveptr = i;
-      return i;
-    }
-  }
-  return -1;
-}
-
-void splitstr(char str[], int part, char search, char out[]) {
+void splitstr(const char str[], int part, char search, char out[]) {
 	int i;
 	for(i=0; str[i]!='\0'; i++) {
     if(str[i] == search) {

@@ -35,7 +35,7 @@ void cursorForwards(int num);
 void cursorBack(int num);
 void scrollDown();
 
-void printf(char text[]) {
+void printf(const char text[]) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
 	int i;
 	for(i = 0; text[i] != 0; i++, offset+=2) {
@@ -75,7 +75,7 @@ void printChar(char c) {
 	__setCursor__(1+offset);
 }
 
-void printfc(char text[], char attr) {
+void printfc(const char text[], char attr) {
 	char* video_memory = (char*) VIDEO_ADDRESS;
 	int i;
 	for(i = 0; text[i] != 0; i++, offset+=2) {

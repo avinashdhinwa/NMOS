@@ -32,11 +32,24 @@ disk_load:
 	; 0x7C00. Don't read anymore or we overwrite the bootloader we are
 	; executing from. (0x7c00-0x2000)/512 = 46
 
-	mov ah, 0x42
+	mov bx, KERNEL_OFFSET
+	mov ah, 0x02
+ 	mov al, 1
+ 	mov ch, 0x00
+ 	mov dh, 0x00
+ 	mov cl, 2
 	mov dl, [BOOT_DRIVE]
-	mov si, dap
+
+disk_loop:
 
 	int 0x13
+	add bx, 512
+	inc cl
+	cmp cl, 48
+	jne loop_end
+	jmp disk_loop
+
+loop_end:
 
 	;cmp al, 4
 	;jne disk_error_132
@@ -44,14 +57,14 @@ disk_load:
 	ret
 
 dap:
-  db 0x10				; Size of DAP
-  db 0
+    db 0x10				; Size of DAP
+    db 0
 
-  dw 46				; Number of sectors to read
-  dw KERNEL_OFFSET	; Offset
-  dw 0				; Segment
+    dw 46				; Number of sectors to read
+    dw KERNEL_OFFSET	; Offset
+    dw 0				; Segment
 	dd 1
-  dd 0
+    dd 0
 
 disk_error_132:
 	mov bx, disk_error_132_msg
