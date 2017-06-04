@@ -1,5 +1,5 @@
-#ifndef _PORTS_H
-#define _PORTS_H
+#ifndef _IO_H
+#define _IO_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -26,6 +26,5 @@ static inline void io_wait(void) {
                    "1:jmp 2f\n\t"
                    "2:" );
 }
-
 
 #endif

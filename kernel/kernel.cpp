@@ -6,6 +6,7 @@
 #include "config.h"
 #include "rand.h"
 #include "time.h"
+#include "vga.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -67,6 +68,8 @@ void main() {
   const char* greeting = greetings[rand_uniform(GREET_NUM)];
   printf(greeting);
   printf("\n\n");
+
+  _VGA_switchMode();
 	terminal();
 }
 

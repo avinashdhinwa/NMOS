@@ -1,7 +1,7 @@
 #ifndef _SCREEN_H
 #define _SCREEN_H
 
-#include "ports.h"
+#include "io.h"
 #include "misc.h"
 #include "memory.h"
 #include <stddef.h>

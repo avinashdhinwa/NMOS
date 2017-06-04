@@ -1,7 +1,7 @@
 #ifndef _VGA_H
 #define _VGA_H
 
-#include "ports.h"
+#include "io.h"
 #include "screen.h"
 
 #define	VGA_AC_INDEX		    0x3C0
@@ -42,6 +42,11 @@ unsigned char g_320x200x256[] = {
 void _VGA_CRTC_writeReg(uint8_t reg, uint16_t val) {
   outb(VGA_CRTC_INDEX, reg);
   outb(VGA_CRTC_DATA, val);
+}
+
+uint8_t _VGA_CRTC_readReg(uint8_t reg) {
+  outb(VGA_CRTC_INDEX, reg);
+  return inb(VGA_CRTC_DATA);
 }
 
 void _VGA_GC_writeReg(uint8_t reg, uint16_t val) {
@@ -112,8 +117,8 @@ void _VGA_clearScreen() {
   }
 }
 
-void _VGA_switchMode(unsigned char *mode) {
-  int i;
+void _VGA_switchMode() {
+  /*int i;
 
   _VGA_MISC_writeReg(*mode);      // miscellaneous output register
   mode++;
@@ -145,14 +150,14 @@ void _VGA_switchMode(unsigned char *mode) {
 	}
 
 	_VGA_intantRead();
-	outb(VGA_AC_INDEX, 0x20);
+	outb(VGA_AC_INDEX, 0x20);*/
 
-  /*_VGA_SEQ_writeReg(0x01, 0x01); // clock mode register
+  _VGA_SEQ_writeReg(0x01, 0x01); // clock mode register
   _VGA_SEQ_writeReg(0x03, 0x00); // character select
   _VGA_SEQ_writeReg(0x04, 0x0e); // memory mode register
 
-  _VGA_CRTC_writeReg(0x03, inb(VGA_CRTC_DATA) | 0x80);   // unlock crtc regs
-  _VGA_CRTC_writeReg(0x11, inb(VGA_CRTC_DATA) & ~0x80);
+  _VGA_CRTC_writeReg(0x03, _VGA_CRTC_readReg(0x03) | 0x80);   // unlock crtc regs
+  _VGA_CRTC_writeReg(0x11, _VGA_CRTC_readReg(0x03) & 0x7F);
 
   _VGA_AC_writeReg(0x10, 0x41);  // mode control
   _VGA_AC_writeReg(0x11, 0x00);  // overscan register
@@ -180,7 +185,7 @@ void _VGA_switchMode(unsigned char *mode) {
   _VGA_CRTC_writeReg(0x14, 0x40); // underline location
   _VGA_CRTC_writeReg(0x15, 0x96); // vertical blank start
   _VGA_CRTC_writeReg(0x16, 0xb9); // vertical blank end
-  _VGA_CRTC_writeReg(0x17, 0xa3); // mode control*/
+  _VGA_CRTC_writeReg(0x17, 0xa3); // mode control
 }
 
 #endif

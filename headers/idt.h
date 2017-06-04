@@ -6,7 +6,7 @@ extern "C" {  // fix annoying problem where it wouldn't link
 #include "pic.h"
 #include "screen.h"
 #include "config.h"
-#include "ports.h"
+#include "io.h"
 #include "keyboard.h"
 #include "memory.h"
 
