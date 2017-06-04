@@ -1,7 +1,6 @@
-*.flp
-*.iso
+os-image
+os-image.iso
 *.bin
 *.dis
 *.o
 *.dSYM
-iso

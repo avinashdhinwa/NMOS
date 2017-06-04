@@ -14,7 +14,8 @@
 
 #define check_flag(flags, n) ((flags) & bit(n)) 		//Check if bit n in flags is set
 
-void restart() {
+void reboot()
+{
     uint8_t temp;
 
     __asm__ __volatile__ ("cli");

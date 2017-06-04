@@ -1,23 +1,20 @@
-C_SOURCES = $(wildcard kernel/*.cpp headers/*.cpp)
+C_SOURCES = $(wildcard kernel/*.c headers/*.c)
 HEADERS = $(wildcard kernel/*.h headers/*.h)
-OBJ = ${C_SOURCES:.cpp=.o}
+OBJ = ${C_SOURCES:.c=.o}
 
-all: nmos.flp
+all: os-image
 
 run: all
-	qemu-system-i386 nmos.flp
+	qemu-system-i386 os-image
 
-nmos.flp: boot/bootsect2.bin kernel.bin
-	qemu-img create nmos.flp 1200K
-	cat $^ > tmp
-	dd if=tmp of=nmos.flp conv=notrunc
-	rm -rf tmp
+os-image: boot/bootsect2.bin kernel.bin
+	cat $^ > os-image
 
 kernel.bin: kernel/kernel_entry.o ${OBJ}
 	i686-elf-ld -o $@ -Ttext 0x2000 $^ --oformat binary
 
-%.o: %.cpp ${HEADERS}
-	i686-elf-g++ -ffreestanding -Iheaders/ -Wall -Wextra -c $< -o $@
+%.o: %.c ${HEADERS}
+	i686-elf-gcc -ffreestanding -Iheaders/ -Wall -Wextra -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@
@@ -29,23 +26,18 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 	nasm $< -f bin -I ../../16bit/ -o $@
 
 clean:
-	rm -fr *.bin *.dis *.o nmos.flp
+	rm -fr *.bin *.dis *.o os-image
 	rm -fr kernel/*.o boot/*.bin headers/*.o
 
-nmos.iso: boot/bootsect3.asm kernel.bin
-	qemu-img create tmp.flp 1200K
-	cat $^ > tmp
-	dd if=tmp of=tmp.flp conv=notrunc
-	rm -rf tmp
-	rm -rf iso
+os-image.iso: os-image
 	mkdir iso
 	mkdir iso/boot
-	cp tmp.flp iso/boot/boot
+	cp os-image iso/boot/boot
 	xorriso -as mkisofs -R -J -c boot/bootcat \
-                    -b boot/boot \
-                    -o nmos.iso iso
-	rm -rf tmp.flp
-iso: nmos.iso
+						-b boot/boot -no-emul-boot -boot-load-size 4 \
+						-o os-image.iso iso
 
-run-iso: nmos.iso
-	qemu-system-x86_64 -boot d -cdrom nmos.iso -m 512
+iso: os-image.iso
+
+run-iso: os-image.iso
+	qemu-system-x86_64 -boot d -cdrom os-image.iso -m 512

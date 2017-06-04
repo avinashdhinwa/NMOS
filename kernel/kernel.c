@@ -15,17 +15,16 @@
 
 #define GREET_NUM 8
 
-void parseCommand(const char* command);
+void parseCommand(char* command);
 void terminal();
-void help(unused const char* arg);
-void echo(const char* arg);
-void ping(unused const char* arg);
-void time(unused const char* arg);
-void reboot(unused const char* arg);
+void help(unused char* arg);
+void echo(char* arg);
+void ping(unused char* arg);
+void time(unused char* arg);
 
 struct cmd_entry_t {
-    const char *cmd_str;
-    void (*cmd_fun)(const char* arg);
+    char *cmd_str;
+    void (*cmd_fun)(char* arg);
 };
 typedef struct cmd_entry_t cmd_entry;
 
@@ -35,10 +34,10 @@ cmd_entry commands[20] = {
   {"echo", &echo},
   {"ping", &ping},
   {"time", &time},
-	{(const char *)0x121212, NULL}			// Command list signiature
+	{(void *)0x121212, NULL}			// Command list signiature
 };
 
-const char* greetings[] = {
+char* greetings[] = {
   "It's NMOS! (or is it?)",
   "0% bug free!",
   "Totally no stolen code!",
@@ -65,7 +64,7 @@ void main() {
 	init_idt();
 
   srand(second()); // seed psuedo-rng with time
-  const char* greeting = greetings[rand_uniform(GREET_NUM)];
+  char* greeting = greetings[rand_uniform(GREET_NUM)];
   printf(greeting);
   printf("\n\n");
 
@@ -84,7 +83,7 @@ void terminal() {
 	}
 }
 
-void parseCommand(const char* commandin) {
+void parseCommand(char* commandin) {
 	int i = 0;
 	int success = 0;
   char command[20];
@@ -94,23 +93,23 @@ void parseCommand(const char* commandin) {
 	for(i = 0; commands[i].cmd_str != (void *)0x121212; i++) {
 		if (strcmp(command, commands[i].cmd_str)) {
 			success = 1;
-			void (*commandPtr)(const char* arg);
+			void (*commandPtr)(char* arg);
 			commandPtr = commands[i].cmd_fun;
 			(*commandPtr)(arg);
 		}
 	}
 	if(success == 0) {
-		if(strcmp(command, "")) {
+		if(strcmp("help", "")) {
 			printf("Command not found!");
 		} else {
 			printf("Command ");
-			printf((const char*)command);
+			printf(command);
 			printf(" not found!");
 		}
 	}
 }
 
-void help(unused const char* arg) {
+void help(unused char* arg) {
 	int i;
 	printf("Commands:");
 	for(i = 0; commands[i].cmd_str != (void *)0x121212; i++) {
@@ -119,23 +118,19 @@ void help(unused const char* arg) {
 	}
 }
 
-void echo(const char* arg) {
+void echo(char* arg) {
   printf(arg);
 }
 
-void ping(unused const char* arg) {
+void ping(unused char* arg) {
   printf("Pong!");
 }
 
-void time(unused const char* arg) {
+void time(unused char* arg) {
   printf("The time is:\n");
-  printi(hour(), 10);
+  printi(second(), 10);
   printf(":");
   printi(minute(), 10);
   printf(":");
-  printi(second(), 10);
-}
-
-void reboot(unused const char* arg) {
-  restart();
+  printi(hour(), 10);
 }
