@@ -20,10 +20,3 @@ void stopSound() {
   uint8_t tmp = inb(0x61) & 0xFC;
   outb(0x61, tmp);
 }
-
-//Make a beep
-void beep() {
-  playSound(1000);
-  delay(10);
-  stopSound();
-}
