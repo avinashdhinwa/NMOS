@@ -28,8 +28,15 @@ BOOT_DRIVE:
 	db 0
 
 disk_load:
-	mov si, dap
-	mov ah, 0x42
+	mov ah, 0x02
+	mov al, 46
+	mov ch, 0x00
+	mov dh, 0x00
+	mov cl, 0x02
+	mov bx, KERNEL_OFFSET
+
+	;mov si, dap
+	;mov ah, 0x42
 
 	int 0x13
 

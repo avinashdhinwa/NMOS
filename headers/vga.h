@@ -19,26 +19,6 @@
 #define	VGA_DAC_WRITE_INDEX	0x3C8
 #define	VGA_DAC_DATA		    0x3C9
 
-unsigned char g_320x200x256[] = {
-/* MISC */
-	0x63,
-/* SEQ */
-	0x03, 0x01, 0x0F, 0x00, 0x0E,
-/* CRTC */
-	0x5F, 0x4F, 0x50, 0x82, 0x54, 0x80, 0xBF, 0x1F,
-	0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x9C, 0x0E, 0x8F, 0x28,	0x40, 0x96, 0xB9, 0xA3,
-	0xFF,
-/* GC */
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F,
-	0xFF,
-/* AC */
-	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-	0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
-	0x41, 0x00, 0x0F, 0x00,	0x00
-};
-
-
 void _VGA_CRTC_writeReg(uint8_t reg, uint16_t val) {
   outb(VGA_CRTC_INDEX, reg);
   outb(VGA_CRTC_DATA, val);
@@ -118,40 +98,6 @@ void _VGA_clearScreen() {
 }
 
 void _VGA_switchMode() {
-  /*int i;
-
-  _VGA_MISC_writeReg(*mode);      // miscellaneous output register
-  mode++;
-
-  for(i = 0; i < 5; i++) {
-    _VGA_SEQ_writeReg(i, *mode);
-		mode++;
-	}
-
-  _VGA_CRTC_writeReg(0x03, inb(VGA_CRTC_DATA) | 0x80);   // unlock crtc regs
-  _VGA_CRTC_writeReg(0x11, inb(VGA_CRTC_DATA) & ~0x80);
-  //mode[0x03] |= 0x80;
-	//mode[0x11] &= ~0x80;
-
-  for(i = 0; i < 25; i++) {
-    _VGA_CRTC_writeReg(i, *mode);
-		mode++;
-	}
-
-  for(i = 0; i < 9; i++) {
-    _VGA_GC_writeReg(i, *mode);
-		mode++;
-	}
-
-	for(i = 0; i < 21; i++) {
-		_VGA_intantRead();
-    _VGA_AC_writeReg(i, *mode);
-		mode++;
-	}
-
-	_VGA_intantRead();
-	outb(VGA_AC_INDEX, 0x20);*/
-
   _VGA_SEQ_writeReg(0x01, 0x01); // clock mode register
   _VGA_SEQ_writeReg(0x03, 0x00); // character select
   _VGA_SEQ_writeReg(0x04, 0x0e); // memory mode register

@@ -28,6 +28,7 @@ int getCursor();
 void setCursor(int x, int y);
 void __setCursor__(int offset);
 void printf(char text[]);
+void printseq(int num, ...);
 void newLine();
 void printi(int input, int base);
 void printChar(char c);
@@ -53,6 +54,17 @@ void printf(char text[]) {
 	}
 
 	__setCursor__(1+offset);
+}
+
+void printseq(int num, ...) {
+	va_list args;
+  va_start(args, num);
+
+	for(int i = 1; i <= num; i++) {
+		printf(va_arg(args, char*));
+	}
+
+	va_end(args);
 }
 
 

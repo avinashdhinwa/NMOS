@@ -7,13 +7,14 @@
 #include "rand.h"
 #include "time.h"
 #include "vga.h"
+#include "sound.h"
 
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
 
-#define GREET_NUM 8
+#define GREET_NUM 9
 
 void parseCommand(char* command);
 void terminal();
@@ -21,6 +22,8 @@ void help(unused char* arg);
 void echo(char* arg);
 void ping(unused char* arg);
 void time(unused char* arg);
+void mode(unused char* arg);
+void test(char* arg);
 
 struct cmd_entry_t {
     char *cmd_str;
@@ -34,6 +37,8 @@ cmd_entry commands[20] = {
   {"echo", &echo},
   {"ping", &ping},
   {"time", &time},
+  {"mode", &mode},
+  //{"test", &test},
 	{(void *)0x121212, NULL}			// Command list signiature
 };
 
@@ -45,7 +50,8 @@ char* greetings[] = {
   "OS name?",
   "NMOS is da best!",
   "(;",
-  "Give me a N! Give me a M! Give me an O! Give me a S!"
+  "Give me a N! Give me a M! Give me an O! Give me a S!",
+  "SOMN: coming in a parallel universe near you!"
 };
 
 void main() {
@@ -63,12 +69,15 @@ void main() {
 
 	init_idt();
 
+  //__asm__("int $0x0");
+
   srand(second()); // seed psuedo-rng with time
   char* greeting = greetings[rand_uniform(GREET_NUM)];
   printf(greeting);
   printf("\n\n");
 
-  _VGA_switchMode();
+  //playSound(1000);
+
 	terminal();
 }
 
@@ -77,7 +86,7 @@ void terminal() {
 		printf("NMOS:>");
 		char command[20];
 		getText(command);
-		delay(1000000);
+		delay(0.1);
 		parseCommand(command);
 		printf("\n");
 	}
@@ -99,7 +108,7 @@ void parseCommand(char* commandin) {
 		}
 	}
 	if(success == 0) {
-		if(strcmp("help", "")) {
+		if(strcmp(command, "")) {
 			printf("Command not found!");
 		} else {
 			printf("Command ");
@@ -125,6 +134,42 @@ void echo(char* arg) {
 void ping(unused char* arg) {
   printf("Pong!");
 }
+
+void mode(unused char* arg) {
+  _VGA_switchMode();
+}
+
+int contPrompt() {
+  prompt_start:
+  printf("\nPress 1 to continue, 0 to abort:");
+  char c = getChar();
+  if(c == '0') {
+    printf("\nAborting...");
+    return 0;
+  } else if(c == '1') {
+    return 1;
+  } else {
+    printf("\nPlease type 0 or 1.");
+    goto prompt_start;
+  }
+}
+
+/*void test(char* arg) {
+  if(strcmp(arg, "")) {
+    printf("What would you like to test?\n");
+    printf("sound\n");
+    printf("int");
+  } else if(strcmp(arg, "sound")) {
+    printf("Testing sound...");
+    int result = contPrompt();
+    if(!result) {
+      return;
+    }
+    printf("\nSending int 0x0...");
+  } else {
+    printseq(2, "Unknown argument: ", arg);
+  }
+}*/
 
 void time(unused char* arg) {
   printf("The time is:\n");

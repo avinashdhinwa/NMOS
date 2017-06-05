@@ -5,7 +5,7 @@
 #define _NMOS
 
 #define _NMOS_VER_MAJ     "0"
-#define _NMOS_VER_MIN     "9"
+#define _NMOS_VER_MIN     "91"
 
 #define _NMOS_VER         _NMOS_VER_MAJ "." _NMOS_VER_MIN
 

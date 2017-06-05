@@ -14,6 +14,8 @@
 char* itoa(int value, char* str, int base);
 int memcmp(const void* aptr, const void* bptr, size_t size);
 
+int ticks = 0;
+
 char* itoa(int value, char* str, int base){
 	char* rc;
 	char* ptr;
@@ -86,13 +88,25 @@ int strcharfind(char* input, char check, int cont) { // Finds first occurance of
   return -1;
 }
 
+#include "screen.h"
+
 void splitstr(char str[], int part, char search, char out[]) {
 	int i;
+	int result = 0;
 	for(i=0; str[i]!='\0'; i++) {
     if(str[i] == search) {
+			result = 1;
       break;
     }
   }
+	if(result == 0) {
+		if (part == 1) {
+			memcpy(out, str, strlen(str)+1);
+		} else if(part == 2) {
+			memcpy(out, "", 1);
+		}
+		return;
+	}
 	int j;
 	int k;
 	if(part == 1) {
@@ -107,11 +121,9 @@ void splitstr(char str[], int part, char search, char out[]) {
 		out[k] = '\0';
 	}
 }
-void delay(int delay) {
-	int n = 1;
-	while (n < delay) {
-		n++;
-	}
+void delay(double secs) {
+	int n = ticks + (int)(secs * 18.2065);
+	while(ticks < n) {}
 }
 
 #endif

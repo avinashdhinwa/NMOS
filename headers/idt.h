@@ -7,12 +7,15 @@
 #include "io.h"
 #include "keyboard.h"
 #include "memory.h"
+#include "misc.h"
 
 #define MAX_ISR_NUM 33   /* 33 is keyboard handler IRQ1 */
                          /* Set this to the highest ISR you use */
 
 extern void isr_irq0(void);
 extern void isr_irq1(void);
+
+extern void isr_int0(void);
 
 /* Define an ISR stub for IRQ0 */
 __asm__(".global isr_irq0\n"
@@ -25,6 +28,7 @@ __asm__(".global isr_irq0\n"
         "iret");
 
 void isr_irq0_handler(void) {
+  ticks++;
 
   /* End of interrupt */
   _PIC_sendEOI(0x0);
@@ -71,6 +75,19 @@ void isr_irq1_handler(void) {
   return;
 }
 
+__asm__(".global isr_int0\n"
+        "isr_int0:\n\t"
+        "cld\n\t"                    /* Set direction flag forward for C functions */
+        "pusha\n\t"                  /* Save all the registers */
+        /* Other stuff here */
+        "call isr_int0_handler\n\t"
+        "popa\n\t"                   /* Restore all the registers */
+        "iret");
+
+void isr_int0_handler(void) {
+  printf("\nError: some idiot is trying to make me do impossible sums (int 0x0)\n");
+}
+
 struct idt_entry_s {
   uint16_t offset_1;                    // offset bits 0..15
   uint16_t selector;                    // a code segment selector in the GDT or LDT
@@ -114,6 +131,7 @@ void init_idt() {
 
 	fillidt(idt+32, 8, isr_irq0, 0xe, 0);
 	fillidt(idt+33, 8, isr_irq1, 0xe, 0);
+  fillidt(idt, 8, isr_int0, 0xe, 0);
 
 	lidt(idt, sizeof(idt_entry)*(MAX_ISR_NUM+1) - 1);
 
