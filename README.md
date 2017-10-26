@@ -27,10 +27,8 @@ Replace foo.c with the name of the file.
 
 ## ISO building tools: ##
 
-# WARNING! #
-
-ISOs are currently NOT SUPPORTED and attempting to run an ISO will result in the OS hanging.
-ISO tools are only for development use and not for actual use. YOU HAVE BEEN WARNED!
+~~ISOs are currently NOT SUPPORTED and attempting to run an ISO will result in the OS hanging.~~
+ISOs sort of work now. But they still could be glitchy so you shouldn't rely on them.
 
 ### Build ISO: ###
 
