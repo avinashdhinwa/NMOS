@@ -3,6 +3,8 @@ An OS I'm working on.
 
 ![NMOS](image.png "NMOS")
 
+### NOTE: development has been halted, please use <a href="https://github.com/nm111/AlphaOS">AlphaOS!</a>###
+
 ## Compiling ##
 
 To compile you will need a <a href="http://wiki.osdev.org/GCC_Cross-Compiler">i686 cross-compiler</a>.
