@@ -3,7 +3,7 @@ An OS I'm working on.
 
 ![NMOS](image.png "NMOS")
 
-### NOTE: development has been halted, please use <a href="https://github.com/nm111/AlphaOS">AlphaOS!</a>###
+### NOTE: development has been halted, please use <a href="https://github.com/nm111/AlphaOS">AlphaOS!</a> ###
 
 ## Compiling ##
 
